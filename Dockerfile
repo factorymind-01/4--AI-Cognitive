@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 as builder
+FROM ubuntu:18.04
 
 # Soar dependencies
 RUN apt-get update
@@ -36,13 +36,6 @@ RUN echo "set -o vi" >> ~/.bashrc
 # Ensure that additions to bashrc is loaded
 SHELL ["/bin/bash","-c"] 
 
-
-## Expose 
-# 8888: jupyter notebook port
-EXPOSE 8888 
-
-
-FROM builder as dev
 ## Setup dev environment
 RUN apt-get install -y vim 
 ## Install jupyter dependencies
@@ -57,11 +50,9 @@ RUN jupyter nbextension enable vim_binding/vim_binding
 # code folding
 RUN jupyter nbextension enable codefolding/main
 
+## Expose 
+# 8888: jupyter notebook port
+EXPOSE 8888 
+
 # Keep container alive
-ENTRYPOINT ["tail", "-f", "/dev/null"]
-
-
-FROM builder as tutorials
-COPY . /root/
-WORKDIR /root/src/tutorial
 ENTRYPOINT ["tail", "-f", "/dev/null"]
